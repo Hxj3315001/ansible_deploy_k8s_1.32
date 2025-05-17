@@ -1,1 +1,0 @@
-kubeadm join master:6443 --token lvcx2v.s9eporyrp06fij7q --discovery-token-ca-cert-hash sha256:5780e0b27a6f664f77d3798bd08033859be62ea126d07bbca9a62df5ecb30be8 
