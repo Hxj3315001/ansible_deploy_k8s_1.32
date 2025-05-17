@@ -31,6 +31,7 @@ Before running the playbook, ensure:
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
+```
 
 ### 2. Configure your inventory
 Edit the file inventory/hosts.ini to list the IPs and usernames of your Kubernetes nodes.
@@ -41,8 +42,10 @@ master01 ansible_host=192.168.27.140 hostname=master
 
 [nodes]
 node01 ansible_host=192.168.27.141 hostname=node01
+```
 
 ### 3. Run the playbook
 
 ```bash
 ansible-playbook -i inventory/hosts.ini playbook.yaml
+```
