@@ -29,7 +29,7 @@ Before running the playbook, ensure:
 ### 1. Clone or download the repository
 
 ### 2. Configure your inventory
-Edit the file inventory/hosts.ini to list the IPs and usernames of your Kubernetes nodes.
+Edit the file inventory/hosts.ini to list the IPs and hostnames of your Kubernetes nodes.
 
 ```bash
 [masters]
