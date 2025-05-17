@@ -1,0 +1,33 @@
+- name: Check if node is already part of a cluster
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: kubelet_conf
+  
+- name: Read join command from file
+  slurp:
+    src: "{{ kubernetes_join_command_file }}"
+  delegate_to: localhost
+  become: false
+  register: join_command_slurped
+  when: not kubelet_conf.stat.exists
+  
+- name: Set join command fact
+  set_fact:
+    kubernetes_join_command: "{{ join_command_slurped.content | b64decode | trim }}"
+  when: not kubelet_conf.stat.exists
+  
+- name: Join node to Kubernetes cluster
+  shell: "{{ kubernetes_join_command }} --cri-socket=unix:///var/run/cri-dockerd.sock"
+  when: not kubelet_conf.stat.exists
+  register: join_result
+  
+- name: Show join result
+  debug:
+    var: join_result.stdout_lines
+  when: join_result.changed
+
+- name: Wait for kubelet to start
+  systemd:
+    name: kubelet
+    state: started
+  when: join_result.changed

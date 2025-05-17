@@ -1,0 +1,28 @@
+---
+# main.yml - Default configuration values for Kubernetes node setup
+
+# Kubernetes version to install
+#kubernetes_version: "1.32"
+
+# Container runtime to use
+#container_runtime: "cri-docker"
+
+# Path to the file containing the join command from the master
+#kubernetes_join_command_file: "join-command.txt"
+
+# Whether to automatically join the node to the cluster
+#kubernetes_join_cluster: true
+
+# Network configuration
+#kubernetes_pod_network_cidr: "192.168.0.0/16"
+
+# User for kubectl configuration
+#kubernetes_admin_user: "{{ ansible_user }}"
+
+
+# Docker configuration
+#docker_cgroup_driver: systemd
+
+# Package sources
+#kubernetes_apt_release_key_url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key"
+#kubernetes_apt_repository: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/ /"

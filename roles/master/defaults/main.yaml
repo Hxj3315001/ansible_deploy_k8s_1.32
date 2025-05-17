@@ -1,0 +1,8 @@
+---
+kubernetes_version: "1.32.0"
+apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
+kubernetes_apt_repository: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
+
+pod_network_cidr: "192.168.0.0/16"  # Default for Calico
+control_plane_endpoint: "{{ ansible_fqdn }}"
+cni_plugin: "calico" 

@@ -1,0 +1,17 @@
+- name: Set disable swap
+  import_tasks: disable_swap.yml
+
+- name: Kernel module loading and sysctl tuning
+  import_tasks: sysctl.yml
+
+- name: Set hostname and hosts file
+  import_tasks: hostname.yml
+
+- name: Install Docker
+  import_tasks: install_docker.yml
+
+- name: Install cri-dockerd
+  import_tasks: install_cri_dockerd.yml
+
+- name: Install Kubernetes tools
+  import_tasks: install_kube_tools.yml

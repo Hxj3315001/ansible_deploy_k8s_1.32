@@ -1,0 +1,43 @@
+---
+- name: Ensure target system is Ubuntu 22.04
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution == "Ubuntu"
+      - ansible_distribution_version is version("22.04", ">=")
+    msg: "This playbook only works with Ubuntu 22.04 or higher"
+  
+- name: Set system hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+  
+- name: Update /etc/hosts file with hostname
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    line: "127.0.1.1 {{ hostname }}"
+  
+- name: Ensure hostname is persisted (needed in some cloud environments)
+  ansible.builtin.copy:
+    content: "{{ hostname }}"
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Display configured hostname
+  ansible.builtin.debug:
+    msg: "Hostname has been set to: {{ hostname }}"
+
+- name: Add all masters to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item]['ansible_host'] }} {{ hostvars[item]['hostname'] }}"
+    regexp: "^{{ hostvars[item]['ansible_host'] }}\\s"
+  loop: "{{ groups['masters'] }}"
+  
+- name: Add all nodes to /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item]['ansible_host'] }} {{ hostvars[item]['hostname'] }}"
+    regexp: "^{{ hostvars[item]['ansible_host'] }}\\s"
+  loop: "{{ groups['nodes'] }}"

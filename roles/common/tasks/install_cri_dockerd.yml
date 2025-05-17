@@ -1,0 +1,38 @@
+---
+- name: Download cri-dockerd archive
+  get_url:
+    url: "{{ cri_dockerd_download_url }}"
+    dest: /tmp/cri-dockerd.tgz
+
+- name: Extract cri-dockerd archive
+  unarchive:
+    src: /tmp/cri-dockerd.tgz
+    dest: /tmp/
+    remote_src: yes
+
+- name: Move cri-dockerd binary to /usr/local/bin
+  copy:
+    src: /tmp/cri-dockerd/cri-dockerd
+    dest: /usr/bin/cri-dockerd
+    mode: '0755'
+    remote_src: yes
+
+- name: Download cri-dockerd systemd service file
+  get_url:
+    url: "{{ cri_dockerd_systemd_service_url }}"
+    dest: /etc/systemd/system/cri-docker.service
+
+- name: Download cri-dockerd systemd socket file
+  get_url:
+    url: "{{ cri_dockerd_systemd_socket_url }}"
+    dest: /etc/systemd/system/cri-docker.socket
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+
+- name: Enable and start cri-dockerd service
+  systemd:
+    name: cri-docker
+    enabled: yes
+    state: started

@@ -1,0 +1,56 @@
+---
+- name: Update APT package index
+  apt:
+    update_cache: yes
+
+- name: Install required packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+
+- name: Ensure /etc/apt/keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Kubernetes apt key
+  get_url:
+    url: https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key
+    dest: /tmp/kubernetes-apt-key.gpg
+    mode: '0644'
+  register: apt_key_download
+    
+- name: Dearmor the key
+  shell: |
+    cat /tmp/kubernetes-apt-key.gpg | gpg --dearmor > /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  when: apt_key_download.changed
+    
+- name: Add Kubernetes repository
+  copy:
+    content: "{{ kubernetes_apt_repository }}"
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Update APT package index after adding Kubernetes repository
+  apt:
+    update_cache: yes
+
+- name: Install Kubernetes packages
+  apt:
+    name: "{{ kubernetes_packages }}"
+    state: present
+    
+- name: Hold Kubernetes packages
+  shell: "apt-mark hold {{ item }}"
+  loop: "{{ kubernetes_packages }}"
+  register: apt_mark_result
+  changed_when: "'was already set on hold' not in apt_mark_result.stdout"

@@ -1,0 +1,14 @@
+---
+docker_apt_key_url: https://download.docker.com/linux/ubuntu/gpg
+docker_apt_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+cri_dockerd_version: "0.3.1"
+cri_dockerd_download_url: "https://github.com/Mirantis/cri-dockerd/releases/download/v{{ cri_dockerd_version }}/cri-dockerd-{{ cri_dockerd_version }}.amd64.tgz"
+cri_dockerd_systemd_service_url: "https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.service"
+cri_dockerd_systemd_socket_url: "https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.socket"
+
+kubernetes_apt_repository: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /
+kubernetes_packages:
+  - kubelet
+  - kubeadm
+  - kubectl
+  
