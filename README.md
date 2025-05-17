@@ -28,11 +28,6 @@ Before running the playbook, ensure:
 
 ### 1. Clone or download the repository
 
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-```
-
 ### 2. Configure your inventory
 Edit the file inventory/hosts.ini to list the IPs and usernames of your Kubernetes nodes.
 
